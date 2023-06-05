@@ -4,8 +4,22 @@
     <meta charset="UTF-8">
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Registration</title>
 </head>
-    <body>
-    <!--Add a registration form here -->
-    </body>
+<body>
+<form action="{% url 'djangoapp:registration' %}" method="post">
+    <div class="container">
+        <h1>Sign Up</h1>
+        <hr>
+        <label for="signup-username"><b>User Name</b></label>
+        <input id="signup-username" type="text" placeholder="Enter User Name: " name="username" required>
+        <label for="signup-password"><b>Password</b></label>
+        <input id="signup-password" type="password" placeholder="Enter Password: " name="password" required>
+        <div>
+            {% csrf_token %}
+            <button class="button" type="submit">Sign Up</button>
+        </div>
+    </div>
+</form>
+</body>
 </html>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress ALL -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,12 +8,63 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
-    <body>
+<body>
 
-    <!--Add a nav bar here -->
-
-    <!-- Add reviews as cards -->
-
-    </body>
+<!--Add a nav bar here -->
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Dealership Review</a>
+        </div>
+        <ul class="navbar navbar-nav">
+            <li>
+                <a href={% url 'djangoapp:about' %}>About Us</a>
+                <a href={% url 'djangoapp:contact' %}>Contact Us</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                {% if user.is_authenticated %}
+                    <a class="btn btn-link" href="#">({{ user.username }})</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:add_review' dealerId %}">Add a review</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                {% else %}
+                    <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <label>
+                                <input type="text" class="form-control" placeholder="Username" name="username">
+                            </label>
+                            <label>
+                                <input type="password" class="form-control" placeholder="Password" name="password">
+                            </label>
+                            <button class="btn btn-primary" type="submit">Login</button>
+                            <a class="btn btn-link" href="{% url 'djangoapp:signup' %}">Sign Up</a>
+                        </div>
+                    </form>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</nav>
+<!-- Add reviews as cards -->
+<div class="card-columns">
+    {% for item in reviews %}
+        <div class="card">
+            {% if item.sentiment == "positive" %}
+                <img width="15%" src="{{ MEDIA_URL }}/emoji/positive.png" alt="positive" class="card-img-left"/>
+            {% elif item.sentiment == "negative" %}
+                <img width="15%" src="{{ MEDIA_URL }}/emoji/negative.png" alt="negative" class="card-img-left"/>
+            {% else %}
+                <img width="15%" src="{{ MEDIA_URL }}/emoji/neutral.png" alt="neutral" class="card-img-left"/>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ item.name }}</h5>
+                <p class="card-text">{{ item.review }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+</body>
 
 </html>
